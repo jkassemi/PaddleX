@@ -89,14 +89,20 @@ class Projector(nn.Layer):
                 t, h, w = image_grid
                 from einops import rearrange
 
+                t_val = int(t.item()) if hasattr(t, "item") else int(t)
+                h_val = int(h.item()) if hasattr(h, "item") else int(h)
+                w_val = int(w.item()) if hasattr(w, "item") else int(w)
+                m1_val = int(m1)
+                m2_val = int(m2)
+
                 image_feature = rearrange(
                     image_feature,
                     "(t h p1 w p2) d -> (t h w) (p1 p2 d)",
-                    t=int(t),
-                    h=int(h // m1),
-                    p1=int(m1),
-                    w=int(w // m2),
-                    p2=int(m2),
+                    t=t_val,
+                    h=h_val // m1_val,
+                    p1=m1_val,
+                    w=w_val // m2_val,
+                    p2=m2_val,
                 )
                 hidden_states = self.linear_1(image_feature)
                 hidden_states = self.act(hidden_states)

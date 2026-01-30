@@ -154,14 +154,13 @@ class PaddleOCRVLProcessor(object):
             index = 0
             for i in range(len(text)):
                 while self.image_token in text[i]:
+                    token_count = int(image_grid_thw[index].prod())
+                    merge_size = int(self.image_processor.merge_size)
+                    token_count //= merge_size
+                    token_count //= merge_size
                     text[i] = text[i].replace(
                         self.image_token,
-                        "<|placeholder|>"
-                        * int(
-                            image_grid_thw[index].prod()
-                            // self.image_processor.merge_size
-                            // self.image_processor.merge_size
-                        ),
+                        "<|placeholder|>" * token_count,
                         1,
                     )
                     index += 1
@@ -171,14 +170,13 @@ class PaddleOCRVLProcessor(object):
             index = 0
             for i in range(len(text)):
                 while self.video_token in text[i]:
+                    token_count = int(video_grid_thw[index].prod())
+                    merge_size = int(self.image_processor.merge_size)
+                    token_count //= merge_size
+                    token_count //= merge_size
                     text[i] = text[i].replace(
                         self.video_token,
-                        "<|placeholder|>"
-                        * (
-                            video_grid_thw[index].prod()
-                            // self.image_processor.merge_size
-                            // self.image_processor.merge_size
-                        ),
+                        "<|placeholder|>" * token_count,
                         1,
                     )
                     index += 1
